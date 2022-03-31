@@ -45,7 +45,7 @@ if [ ${auto_run_flag} -gt 0 ]; then
      printf "Running the generated file ...\n-------------------------------------\n\n"
      $(realpath ${filename})
 
-     if [ ${auto_run_flag} -gt 1 ] && [ ${auto_run_flag} -eq 1 ]; then
+     if [ ${auto_run_flag} -gt 1 ] && [ ${cleanup_flag} -eq 1 ]; then
          printf "\n-------------------------------------\nRemoving generated file\n"
          rm ${filename}
      fi
