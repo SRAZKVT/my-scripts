@@ -4,15 +4,15 @@ auto_run_flag=0
 
 while getopts 'cr' FLAG
     do
-       case $FLAG in
-           c)     cleanup_flag=1
-                  ;;
-           r)     auto_run_flag=1
-                  ;;
-           ?)     printf "Usage: $0 [-c] [-r] [FILENAME]\n"
-                  exit 1
-                  ;;
-       esac
+        case $FLAG in
+            c)     cleanup_flag=1
+                   ;;
+            r)     auto_run_flag=$(echo ${auto_run_flag}+1 | bc)
+                   ;;
+            ?)     printf "Usage: $0 [-c] [-r] [FILENAME]\n"
+                   exit 1
+                   ;;
+        esac
     done
 shift $(($OPTIND - 1))
 
@@ -41,8 +41,13 @@ if [ ${cleanup_flag} -eq 1 ]; then
      printf "Removing object file\n"
      rm ${filename}.o
 fi
-if [ ${auto_run_flag} -eq 1 ]; then
-     printf "Running the generated file ...\n\n"
+if [ ${auto_run_flag} -gt 0 ]; then
+     printf "Running the generated file ...\n-------------------------------------\n\n"
      $(realpath ${filename})
+
+     if [ ${auto_run_flag} -gt 1 ] && [ ${auto_run_flag} -eq 1 ]; then
+         printf "\n-------------------------------------\nRemoving generated file\n"
+         rm ${filename}
+     fi
 fi
 exit 0
